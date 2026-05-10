@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>東方幻想郷 - Bullet Hell</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Share+Tech+Mono&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0010;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Share Tech Mono', monospace;
+      overflow: hidden;
+    }
+
+    #wrapper {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    #gameCanvas {
+      border: 1px solid #3a1a5a;
+      box-shadow: 0 0 30px #5500aa44, 0 0 60px #2200550a;
+      display: block;
+    }
+
+    #sidebar {
+      width: 160px;
+      color: #ddc8ff;
+      font-size: 12px;
+      line-height: 1.8;
+      padding-top: 4px;
+    }
+
+    .side-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 11px;
+      color: #aa77ff;
+      border-bottom: 1px solid #3a1a5a;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      letter-spacing: 2px;
+    }
+
+    .side-val {
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .side-block { margin-bottom: 16px; }
+
+    #livesDisplay { display: flex; gap: 4px; flex-wrap: wrap; }
+    #bombsDisplay { display: flex; gap: 4px; flex-wrap: wrap; }
+
+#shieldBlock { margin-bottom: 16px; }
+#shieldDisplay { font-size: 9px; letter-spacing: 1px; line-height: 1.4; }
+.shield-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 11px; color: #44ddbb;
+  border-bottom: 1px solid #1a3a33;
+  padding-bottom: 4px; margin-bottom: 6px; letter-spacing: 2px;
+}
+
+    .heart { color: #ff4488; font-size: 14px; }
+    .bomb-icon { color: #44ddff; font-size: 14px; }
+
+    .controls {
+      font-size: 10px;
+      color: #775599;
+      line-height: 2;
+    }
+    .controls span { color: #aa88cc; }
+
+    #phaseDisplay {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 10px;
+      color: #ffaa44;
+      min-height: 36px;
+    }
+
+    #graze-counter { color: #ffdd44; }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <div id="sidebar">
+      <div class="side-block">
+        <div class="side-title">SCORE</div>
+        <div class="side-val" id="scoreDisplay">0</div>
+      </div>
+      <div class="side-block">
+        <div class="side-title">HI-SCORE</div>
+        <div class="side-val" id="hiScoreDisplay">0</div>
+      </div>
+      <div class="side-block">
+        <div class="side-title">VIES</div>
+        <div id="livesDisplay"></div>
+      </div>
+      <div class="side-block">
+        <div class="side-title">BOMBES</div>
+        <div id="bombsDisplay"></div>
+      </div>
+      <div class="side-block">
+        <div class="side-title">GRAZE</div>
+        <div class="side-val" id="graze-counter">0</div>
+      </div>
+      <div class="side-block">
+        <div class="side-title">PHASE</div>
+        <div id="phaseDisplay">—</div>
+      </div>
+      <div class="side-block controls">
+        <div class="side-title">CONTRÔLES</div>
+        <div><span>Z / Espace</span> Tirer</div>
+        <div><span>Shift</span> Focus</div>
+        <div><span>X</span> Bombe</div>
+        <div><span>Flèches / WASD</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="particles.js"></script>
+  <script src="pattern.js"></script>
+  <script src="difficulty.js"></script>
+  <script src="menu.js"></script>
+  <script src="boss.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
