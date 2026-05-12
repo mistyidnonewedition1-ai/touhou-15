@@ -60,17 +60,21 @@
     #livesDisplay { display: flex; gap: 4px; flex-wrap: wrap; }
     #bombsDisplay { display: flex; gap: 4px; flex-wrap: wrap; }
 
-#shieldBlock { margin-bottom: 16px; }
-#shieldDisplay { font-size: 9px; letter-spacing: 1px; line-height: 1.4; }
-.shield-title {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 11px; color: #44ddbb;
-  border-bottom: 1px solid #1a3a33;
-  padding-bottom: 4px; margin-bottom: 6px; letter-spacing: 2px;
-}
-
     .heart { color: #ff4488; font-size: 14px; }
     .bomb-icon { color: #44ddff; font-size: 14px; }
+
+    /* Bouclier */
+    #shieldBlock { margin-bottom: 16px; }
+    #shieldDisplay { font-size: 9px; letter-spacing: 1px; line-height: 1.4; }
+    .shield-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 11px;
+      color: #44ddbb;
+      border-bottom: 1px solid #1a3a33;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      letter-spacing: 2px;
+    }
 
     .controls {
       font-size: 10px;
@@ -93,37 +97,52 @@
   <div id="wrapper">
     <canvas id="gameCanvas" width="400" height="600"></canvas>
     <div id="sidebar">
+
       <div class="side-block">
         <div class="side-title">SCORE</div>
         <div class="side-val" id="scoreDisplay">0</div>
       </div>
+
       <div class="side-block">
         <div class="side-title">HI-SCORE</div>
         <div class="side-val" id="hiScoreDisplay">0</div>
       </div>
+
       <div class="side-block">
         <div class="side-title">VIES</div>
         <div id="livesDisplay"></div>
       </div>
+
       <div class="side-block">
         <div class="side-title">BOMBES</div>
         <div id="bombsDisplay"></div>
       </div>
+
+      <div id="shieldBlock" class="side-block">
+        <div class="shield-title">BOUCLIER</div>
+        <div id="shieldDisplay"></div>
+        <div style="font-size:9px;color:#336655;margin-top:3px;">Tuer 15 → +♥</div>
+      </div>
+
       <div class="side-block">
         <div class="side-title">GRAZE</div>
         <div class="side-val" id="graze-counter">0</div>
       </div>
+
       <div class="side-block">
-        <div class="side-title">PHASE</div>
+        <div class="side-title">BOSS</div>
         <div id="phaseDisplay">—</div>
       </div>
+
       <div class="side-block controls">
         <div class="side-title">CONTRÔLES</div>
         <div><span>Z / Espace</span> Tirer</div>
         <div><span>Shift</span> Focus</div>
         <div><span>X</span> Bombe</div>
+        <div><span>ESC</span> Menu</div>
         <div><span>Flèches / WASD</span></div>
       </div>
+
     </div>
   </div>
 
