@@ -76,7 +76,12 @@ document.addEventListener('keydown', e => {
     return;
   }
   if (e.code === 'KeyX') useBomb();
-  if (e.code === 'Escape' && (gameState === 'playing' || gameState === 'bossEntry' || gameState === 'bossBattle')) {
+  // Passer le dialogue boss avec Z
+  if ((e.code === 'KeyZ' || e.code === 'Space') && gameState === 'bossDialogue') {
+    Boss.skipDialogue();
+    return;
+  }
+  if (e.code === 'Escape' && (gameState === 'playing' || gameState === 'bossEntry' || gameState === 'bossBattle' || gameState === 'bossDialogue')) {
     gameState = 'menu';
     Menu.goMain();
   }
@@ -532,7 +537,16 @@ function triggerBoss() {
   Boss.spawn(W);
   const ph = Boss.currentPhase();
   phaseDisplay.innerHTML = `<span style="color:${ph.color}">${ph.name}</span><br>${ph.nameRom}`;
-  setTimeout(() => { if (gameState === 'bossEntry') gameState = 'bossBattle'; }, 2500);
+
+  // Après l'entrée du boss, déclencher le dialogue d'intro
+  setTimeout(() => {
+    if (gameState !== 'bossEntry') return;
+    gameState = 'bossDialogue';
+    Boss.triggerIntroDialogue(() => {
+      // Dialogue terminé → début du vrai combat
+      if (gameState === 'bossDialogue') gameState = 'bossBattle';
+    });
+  }, 2000);
 }
 
 // Interlude entre boss
@@ -639,14 +653,15 @@ function drawPlayer() {
 }
 
 function drawPlayerBullets() {
+  // shadowBlur appliqué une seule fois hors boucle pour les perfs
+  ctx.save();
+  ctx.shadowBlur = 6;
+  ctx.shadowColor = '#88ffff';
+  ctx.fillStyle = '#ccffff';
   for (const b of bullets) {
-    ctx.save();
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = '#88ffff';
-    ctx.fillStyle = '#ccffff';
     ctx.fillRect(b.x - (b.w / 2), b.y, b.w, b.h);
-    ctx.restore();
   }
+  ctx.restore();
 }
 
 function drawEnemy(e) {
@@ -925,6 +940,10 @@ function update() {
   } else if (gameState === 'bossEntry') {
     updatePlayer();
     Boss.updateMovement();
+  } else if (gameState === 'bossDialogue') {
+    // Combat gelé pendant le dialogue — boss continue de bouger doucement
+    Boss.updateMovement();
+    Boss.tickDialogue();
   }
 
   if (gameState === 'playing' || gameState === 'bossBattle') {
@@ -960,6 +979,10 @@ function draw() {
   drawShieldBar();
 
   if (gameState === 'bossEntry') drawBossEntry();
+  if (gameState === 'bossDialogue') {
+    Boss.draw(ctx); // boss visible
+    Boss.drawIntroDialogue(ctx);
+  }
   // Interlude entre boss
   if (interludeTimer > 0) {
     interludeTimer--;

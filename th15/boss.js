@@ -6,7 +6,7 @@ const Boss = (() => {
 
   // ── Sprite sheet ────────────────────────────
   const sheet = new Image();
-  sheet.src = 'sprites/boss_sheet.png';
+  sheet.src = 'sprites/boss_sheet.jpg'; // ← CORRIGÉ : .jpg pas .png
   let sheetReady = false;
   sheet.onload  = () => { sheetReady = true; };
   sheet.onerror = () => { sheetReady = false; };
@@ -30,7 +30,6 @@ const Boss = (() => {
   // ════════════════════════════════════════════
 
   const BOSS_ROSTER = [
-    // ── Boss 1 : Gardienne des Glaces (vague 5) ──
     {
       id: 'frost',
       name: '氷の番人',
@@ -39,13 +38,18 @@ const Boss = (() => {
       color: '#88ccff',
       glowColor: '#4499ff',
       useSprite: true,
+      // ← Dialogues d'intro et de victoire
+      introDialogue: 'Tu oses défier la Gardienne des Glaces ? Prépare-toi à geler pour l\'éternité !',
+      deathDialogue: 'Im... impossible... Ma glace éternelle... brisée...',
       phases: [
-        { name: '「氷結の序曲」', nameRom: 'Ouverture Glaciale', hp: 350, color: '#88ccff', glowColor: '#4499ff', isSpellCard: false, pattern: 'frost1',    fireRate: 90, busteIdx: 0 },
-        { name: '「霜の踊り子」', nameRom: 'Danseuse de Givre',  hp: 300, color: '#aaddff', glowColor: '#66aaff', isSpellCard: true,  pattern: 'frostSC',   fireRate: 1,  busteIdx: 1 },
-        { name: '「永久凍土」',   nameRom: 'Permafrost Éternel', hp: 380, color: '#ffffff', glowColor: '#aaccff', isSpellCard: true,  pattern: 'frostFinal',fireRate: 1,  busteIdx: 2 },
+        { name: '「氷結の序曲」', nameRom: 'Ouverture Glaciale', hp: 350, color: '#88ccff', glowColor: '#4499ff', isSpellCard: false, pattern: 'frost1',    fireRate: 90, busteIdx: 0,
+          phaseDialogue: null },
+        { name: '「霜の踊り子」', nameRom: 'Danseuse de Givre',  hp: 300, color: '#aaddff', glowColor: '#66aaff', isSpellCard: true,  pattern: 'frostSC',   fireRate: 1,  busteIdx: 1,
+          phaseDialogue: 'Voici ma vraie puissance... Danse avec les cristaux de givre !' },
+        { name: '「永久凍土」',   nameRom: 'Permafrost Éternel', hp: 380, color: '#ffffff', glowColor: '#aaccff', isSpellCard: true,  pattern: 'frostFinal',fireRate: 1,  busteIdx: 2,
+          phaseDialogue: 'Je vais t\'engloutir dans un froid sans fin !' },
       ],
     },
-    // ── Boss 2 : Spectre Lunaire (vague 11) ──
     {
       id: 'lunar',
       name: '月の亡霊',
@@ -54,13 +58,17 @@ const Boss = (() => {
       color: '#cc88ff',
       glowColor: '#9933ff',
       useSprite: false,
+      introDialogue: 'Ah... un visiteur sous la lune. Je vais t\'offrir un rêve dont tu ne te réveilleras jamais.',
+      deathDialogue: 'La lune... elle se détourne de moi...',
       phases: [
-        { name: '「月光の幻影」', nameRom: 'Illusion Lunaire',   hp: 500, color: '#cc88ff', glowColor: '#9933ff', isSpellCard: false, pattern: 'lunar1',    fireRate: 75, busteIdx: 3 },
-        { name: '「幻想の渦」',   nameRom: 'Vortex Fantôme',     hp: 450, color: '#ff88ff', glowColor: '#cc00ff', isSpellCard: true,  pattern: 'lunarSC',   fireRate: 1,  busteIdx: 4 },
-        { name: '「月蝕の境界」', nameRom: 'Frontière Éclipsée', hp: 520, color: '#ffaaff', glowColor: '#ff44ff', isSpellCard: true,  pattern: 'lunarFinal',fireRate: 1,  busteIdx: 0 },
+        { name: '「月光の幻影」', nameRom: 'Illusion Lunaire',   hp: 500, color: '#cc88ff', glowColor: '#9933ff', isSpellCard: false, pattern: 'lunar1',    fireRate: 75, busteIdx: 3,
+          phaseDialogue: null },
+        { name: '「幻想の渦」',   nameRom: 'Vortex Fantôme',     hp: 450, color: '#ff88ff', glowColor: '#cc00ff', isSpellCard: true,  pattern: 'lunarSC',   fireRate: 1,  busteIdx: 4,
+          phaseDialogue: 'Mes illusions vont t\'engloutir !' },
+        { name: '「月蝕の境界」', nameRom: 'Frontière Éclipsée', hp: 520, color: '#ffaaff', glowColor: '#ff44ff', isSpellCard: true,  pattern: 'lunarFinal',fireRate: 1,  busteIdx: 0,
+          phaseDialogue: 'La frontière entre rêve et réalité... disparaît !' },
       ],
     },
-    // ── Boss 3 : Reine des Neiges (vague 18) ──
     {
       id: 'queen',
       name: '永遠雪姫',
@@ -69,15 +77,21 @@ const Boss = (() => {
       color: '#44eeff',
       glowColor: '#00ccff',
       useSprite: true,
+      introDialogue: 'Petite créature... tu as survécu jusqu\'ici. C\'est admirable. Mais ton voyage s\'arrête là.',
+      deathDialogue: 'Tu es... vraiment fort. Peut-être que ce monde a encore besoin de toi...',
       phases: [
-        { name: '「紅の序章」',   nameRom: 'Prélude Écarlate',     hp: 500, color: '#88ccff', glowColor: '#4499ff', isSpellCard: false, pattern: 'phase1',     fireRate: 80, busteIdx: 0 },
-        { name: '「螺旋の夢」',   nameRom: 'Rêve Spiral',           hp: 420, color: '#ff44ff', glowColor: '#cc00ff', isSpellCard: true,  pattern: 'spellcard1', fireRate: 1,  busteIdx: 1 },
-        { name: '「蒼天の怒り」', nameRom: 'Courroux du Ciel Azur', hp: 580, color: '#4488ff', glowColor: '#0044ff', isSpellCard: false, pattern: 'phase2',     fireRate: 65, busteIdx: 2 },
-        { name: '「永遠と瞬間」', nameRom: 'Éternité et Instant',   hp: 650, color: '#ffdd44', glowColor: '#ffaa00', isSpellCard: true,  pattern: 'spellcard2', fireRate: 1,  busteIdx: 3 },
-        { name: '「最後の境界」', nameRom: 'Dernière Frontière',    hp: 400, color: '#ffffff', glowColor: '#aaaaff', isSpellCard: true,  pattern: 'final',      fireRate: 1,  busteIdx: 4 },
+        { name: '「紅の序章」',   nameRom: 'Prélude Écarlate',     hp: 500, color: '#88ccff', glowColor: '#4499ff', isSpellCard: false, pattern: 'phase1',     fireRate: 80, busteIdx: 0,
+          phaseDialogue: null },
+        { name: '「螺旋の夢」',   nameRom: 'Rêve Spiral',           hp: 420, color: '#ff44ff', glowColor: '#cc00ff', isSpellCard: true,  pattern: 'spellcard1', fireRate: 1,  busteIdx: 1,
+          phaseDialogue: 'Laisse-toi emporter par la spirale du rêve éternel !' },
+        { name: '「蒼天の怒り」', nameRom: 'Courroux du Ciel Azur', hp: 580, color: '#4488ff', glowColor: '#0044ff', isSpellCard: false, pattern: 'phase2',     fireRate: 65, busteIdx: 2,
+          phaseDialogue: 'Le ciel lui-même va te punir de ton audace !' },
+        { name: '「永遠と瞬間」', nameRom: 'Éternité et Instant',   hp: 650, color: '#ffdd44', glowColor: '#ffaa00', isSpellCard: true,  pattern: 'spellcard2', fireRate: 1,  busteIdx: 3,
+          phaseDialogue: 'Le temps s\'arrête... et toi avec lui !' },
+        { name: '「最後の境界」', nameRom: 'Dernière Frontière',    hp: 400, color: '#ffffff', glowColor: '#aaaaff', isSpellCard: true,  pattern: 'final',      fireRate: 1,  busteIdx: 4,
+          phaseDialogue: 'Ma dernière carte... Le destin lui-même combat à mes côtés !' },
       ],
     },
-    // ── Extra Boss ──
     {
       id: 'extra',
       name: '混沌の女神',
@@ -87,18 +101,54 @@ const Boss = (() => {
       glowColor: '#cc00aa',
       useSprite: false,
       isExtra: true,
+      introDialogue: 'Tu as vaincu mes servantes... Impressionnant. Mais moi, je suis le chaos lui-même.',
+      deathDialogue: '...Le chaos ne peut être vaincu. Il reviendra. Toujours.',
       phases: [
-        { name: '「虚無の扉」',   nameRom: 'Portail du Néant',            hp: 700, color: '#aa44ff', glowColor: '#7700cc', isSpellCard: false, pattern: 'extra1',     fireRate: 60, busteIdx: 0 },
-        { name: '「混沌の螺旋」', nameRom: 'Spirale du Chaos',            hp: 650, color: '#ff00ff', glowColor: '#cc00aa', isSpellCard: true,  pattern: 'extraSC1',   fireRate: 1,  busteIdx: 2 },
-        { name: '「無限の壁」',   nameRom: "Mur de l'Infini",             hp: 800, color: '#00ffff', glowColor: '#0099cc', isSpellCard: false, pattern: 'extra2',     fireRate: 50, busteIdx: 1 },
-        { name: '「破滅の閃光」', nameRom: 'Éclair de Destruction',       hp: 700, color: '#ffff00', glowColor: '#ffaa00', isSpellCard: true,  pattern: 'extraSC2',   fireRate: 1,  busteIdx: 3 },
-        { name: '「神命・終焉」', nameRom: 'Décret Divin · Fin du Monde', hp: 900, color: '#ff4400', glowColor: '#ff0000', isSpellCard: true,  pattern: 'extraFinal', fireRate: 1,  busteIdx: 4 },
+        { name: '「虚無の扉」',   nameRom: 'Portail du Néant',            hp: 700, color: '#aa44ff', glowColor: '#7700cc', isSpellCard: false, pattern: 'extra1',     fireRate: 60, busteIdx: 0,
+          phaseDialogue: null },
+        { name: '「混沌の螺旋」', nameRom: 'Spirale du Chaos',            hp: 650, color: '#ff00ff', glowColor: '#cc00aa', isSpellCard: true,  pattern: 'extraSC1',   fireRate: 1,  busteIdx: 2,
+          phaseDialogue: 'La spirale du chaos va tout dévorer !' },
+        { name: '「無限の壁」',   nameRom: "Mur de l'Infini",             hp: 800, color: '#00ffff', glowColor: '#0099cc', isSpellCard: false, pattern: 'extra2',     fireRate: 50, busteIdx: 1,
+          phaseDialogue: 'Tu ne peux pas franchir l\'infini !' },
+        { name: '「破滅の閃光」', nameRom: 'Éclair de Destruction',       hp: 700, color: '#ffff00', glowColor: '#ffaa00', isSpellCard: true,  pattern: 'extraSC2',   fireRate: 1,  busteIdx: 3,
+          phaseDialogue: 'La lumière de la destruction efface tout !' },
+        { name: '「神命・終焉」', nameRom: 'Décret Divin · Fin du Monde', hp: 900, color: '#ff4400', glowColor: '#ff0000', isSpellCard: true,  pattern: 'extraFinal', fireRate: 1,  busteIdx: 4,
+          phaseDialogue: 'C\'est la fin de tout. Le décret divin est prononcé !' },
       ],
     },
   ];
 
   let state        = null;
   let defeatedList = [];
+
+  // ── Dialogue d'intro/phase/mort ─────────────
+  // Retourne { text, bossName, color, busteIdx, onDone }
+  // onDone est appelé quand le dialogue se termine
+  let pendingDialogue = null; // { text, color, busteIdx, bossName, nameRom, timer, onDone }
+
+  function triggerDialogue(text, color, busteIdx, bossName, nameRom, duration, onDone) {
+    pendingDialogue = { text, color, busteIdx, bossName, nameRom, timer: duration, onDone };
+  }
+
+  function hasDialogue()  { return !!pendingDialogue; }
+  function getDialogue()  { return pendingDialogue; }
+
+  function tickDialogue() {
+    if (!pendingDialogue) return;
+    pendingDialogue.timer--;
+    if (pendingDialogue.timer <= 0) {
+      const cb = pendingDialogue.onDone;
+      pendingDialogue = null;
+      if (cb) cb();
+    }
+  }
+
+  function skipDialogue() {
+    if (!pendingDialogue) return;
+    const cb = pendingDialogue.onDone;
+    pendingDialogue = null;
+    if (cb) cb();
+  }
 
   function nextBossTriggerWave() {
     for (const b of BOSS_ROSTER.filter(b => !b.isExtra))
@@ -125,21 +175,33 @@ const Boss = (() => {
       isExtra: !!def.isExtra,
       hitFlash: 0, ringAngle: 0,
       poseTimer: 0, currentPose: 'pose1', poseFlip: false,
-      showDialogue: false, dialogueTimer: 0, dialogueText: '',
       defColor: def.color, defGlow: def.glowColor,
       useSprite: def.useSprite,
       bossId: def.id, bossName: def.name, bossNameRom: def.nameRom,
+      introDef: def, // pour les dialogues
     };
     return state;
   }
 
-  // Alias pour game.js
   function spawn(W, isExtra = false) { return spawnNext(W, isExtra); }
+
+  // Déclenche le dialogue d'intro (appelé depuis game.js après bossEntry)
+  function triggerIntroDialogue(onDone) {
+    if (!state) { if (onDone) onDone(); return; }
+    const def = state.introDef;
+    const ph  = state.phases[0];
+    triggerDialogue(
+      def.introDialogue || '...Je vais te montrer ma puissance !',
+      def.color, ph.busteIdx,
+      def.name, def.nameRom,
+      220, onDone
+    );
+  }
 
   function currentPhase()      { return state ? state.phases[state.phase] : null; }
   function isActive()          { return !!state && state.alive; }
   function getState()          { return state; }
-  function reset()             { state = null; defeatedList = []; }
+  function reset()             { state = null; defeatedList = []; pendingDialogue = null; }
   function isDead()            { return !state || !state.alive; }
   function allNormalDefeated() { return BOSS_ROSTER.filter(b=>!b.isExtra).every(b=>defeatedList.includes(b.id)); }
 
@@ -163,7 +225,6 @@ const Boss = (() => {
     if (state.hitFlash>0) state.hitFlash--;
     state.poseTimer++;
     state.currentPose = (ph.isSpellCard && Math.floor(state.poseTimer/30)%2===1) ? 'pose2' : 'pose1';
-    if (state.showDialogue) { state.dialogueTimer--; if(state.dialogueTimer<=0) state.showDialogue=false; }
   }
 
   // ── Helpers patterns ────────────────────────
@@ -302,16 +363,39 @@ const Boss = (() => {
     if (ph.hp<=0) {
       if (state.phase<state.phases.length-1) {
         ParticleSystem.bossPhaseTransition(state.x,state.y);
-        eb.length=0; state.phase++; state.frameCounter=0; state.spiralAngle=0;
-        const dlg=['...','私の力を見せてあげる！','まだまだ！','本気を出す時が来た！','最後の力よ...!'];
-        state.showDialogue=true; state.dialogueTimer=180; state.dialogueText=dlg[state.phase]||'...';
-        if(onPhaseChange) onPhaseChange(state.phase,currentPhase());
+        eb.length=0;
+        const nextPhaseIdx = state.phase + 1;
+        const nextPh = state.phases[nextPhaseIdx];
+        const dlgText = nextPh.phaseDialogue || '...';
+
+        // ← On déclenche le dialogue de phase, qui lance le vrai changement de phase quand il se termine
+        triggerDialogue(
+          dlgText,
+          nextPh.color, nextPh.busteIdx,
+          state.bossName, state.bossNameRom,
+          200,
+          () => {
+            // Changement de phase APRÈS le dialogue
+            state.phase = nextPhaseIdx;
+            state.frameCounter = 0;
+            state.spiralAngle = 0;
+            if(onPhaseChange) onPhaseChange(state.phase, currentPhase());
+          }
+        );
       } else {
         defeatedList.push(state.bossId);
-        state.alive=false;
-        ParticleSystem.bossPhaseTransition(state.x,state.y);
-        eb.length=0;
-        if(onDeath) onDeath({bossId:state.bossId,isExtra:state.isExtra,allDefeated:allNormalDefeated()});
+        state.alive = false;
+        ParticleSystem.bossPhaseTransition(state.x, state.y);
+        eb.length = 0;
+        const def = state.introDef;
+        // ← Dialogue de mort avant d'appeler onDeath
+        triggerDialogue(
+          def.deathDialogue || '...Je suis vaincue...',
+          def.color, state.phases[state.phase].busteIdx,
+          state.bossName, state.bossNameRom,
+          220,
+          () => { if(onDeath) onDeath({bossId:state.bossId,isExtra:state.isExtra,allDefeated:allNormalDefeated()}); }
+        );
       }
     }
   }
@@ -323,7 +407,7 @@ const Boss = (() => {
     const {x,y,w,auraAngle,shieldPulse,isExtra,hitFlash,ringAngle}=state;
     ctx.save();
 
-    // Flash dégât
+    // Flash dégât (← sans shadowBlur pour perf)
     if(hitFlash>0){ctx.globalAlpha=(hitFlash/8)*.4;ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(x,y,w*1.8,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
 
     // Aura
@@ -332,14 +416,15 @@ const Boss = (() => {
     grad.addColorStop(0,ph.glowColor+'55'); grad.addColorStop(.5,ph.glowColor+'18'); grad.addColorStop(1,ph.glowColor+'00');
     ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(x,y,auraR,0,Math.PI*2); ctx.fill();
 
-    // Anneaux
+    // Anneaux (← shadowBlur réduit)
     for(let ring=0;ring<(isExtra?3:2);ring++){
       const rr=w*(1.3+ring*.3),segs=isExtra?12:8;
       ctx.strokeStyle=ph.color+(ring===0?'88':ring===1?'44':'22'); ctx.lineWidth=ring===0?1.5:1;
-      ctx.shadowBlur=6; ctx.shadowColor=ph.glowColor; ctx.beginPath();
+      ctx.shadowBlur=4; ctx.shadowColor=ph.glowColor; ctx.beginPath();
       for(let i=0;i<segs;i++){const a1=(Math.PI*2/segs)*i+ringAngle*(ring%2===0?1:-1.5),a2=(Math.PI*2/segs)*i+Math.PI/segs+ringAngle*(ring%2===0?1:-1.5);ctx.moveTo(x+Math.cos(a1)*rr,y+Math.sin(a1)*rr);ctx.lineTo(x+Math.cos(a2)*rr,y+Math.sin(a2)*rr);}
       ctx.stroke();
     }
+    ctx.shadowBlur = 0; // ← reset immédiat
 
     // Sprite ou fallback
     if (state.useSprite && sheetReady) {
@@ -354,15 +439,14 @@ const Boss = (() => {
     } else {
       // Fallback polygone animé
       const sides=isExtra?14:8;
-      ctx.shadowBlur=22; ctx.shadowColor=ph.glowColor;
       ctx.fillStyle=ph.isSpellCard?ph.color+'cc':(isExtra?'#080012':'#100018');
       ctx.beginPath();
       for(let i=0;i<sides;i++){const a=(Math.PI*2/sides)*i+auraAngle*(isExtra?.5:.3),r2=w*(.88+Math.sin(shieldPulse+i*.7)*.05);i===0?ctx.moveTo(x+Math.cos(a)*r2,y+Math.sin(a)*r2):ctx.lineTo(x+Math.cos(a)*r2,y+Math.sin(a)*r2);}
       ctx.closePath(); ctx.fill();
-      ctx.strokeStyle=ph.color; ctx.lineWidth=isExtra?2.5:2; ctx.shadowBlur=16; ctx.stroke();
+      ctx.strokeStyle=ph.color; ctx.lineWidth=isExtra?2.5:2;
+      ctx.shadowBlur=10; ctx.shadowColor=ph.glowColor; ctx.stroke(); ctx.shadowBlur=0;
       // Oeil
       const eyeR=w*(isExtra?.3:.26);
-      ctx.shadowBlur=22; ctx.shadowColor=ph.isSpellCard?'#ffffff':ph.glowColor;
       ctx.fillStyle=ph.isSpellCard?'#ffffff':ph.color;
       ctx.beginPath(); ctx.arc(x,y,eyeR,0,Math.PI*2); ctx.fill();
       ctx.fillStyle='#000022'; ctx.beginPath(); ctx.arc(x+Math.cos(auraAngle*2.5)*eyeR*.35,y+Math.sin(auraAngle*2.5)*eyeR*.35,eyeR*.42,0,Math.PI*2); ctx.fill();
@@ -371,48 +455,77 @@ const Boss = (() => {
 
     // Orbes orbitaux
     const orbCount=isExtra?6:4;
-    for(let i=0;i<orbCount;i++){const a=auraAngle*(i%2===0?1:-.7)+(Math.PI*2/orbCount)*i,or=w*.45+Math.sin(shieldPulse+i)*2;ctx.shadowBlur=10;ctx.shadowColor=ph.color;ctx.fillStyle=ph.color;ctx.beginPath();ctx.arc(x+Math.cos(a)*or,y+Math.sin(a)*or,3.5,0,Math.PI*2);ctx.fill();}
+    ctx.shadowBlur=6;
+    for(let i=0;i<orbCount;i++){const a=auraAngle*(i%2===0?1:-.7)+(Math.PI*2/orbCount)*i,or=w*.45+Math.sin(shieldPulse+i)*2;ctx.shadowColor=ph.color;ctx.fillStyle=ph.color;ctx.beginPath();ctx.arc(x+Math.cos(a)*or,y+Math.sin(a)*or,3.5,0,Math.PI*2);ctx.fill();}
+    ctx.shadowBlur=0;
 
     // Barre HP
     const barW=isExtra?240:200,barH=isExtra?9:7,barX=x-barW/2,barY=y+w+14,hpR=Math.max(0,ph.hp/ph.maxHp);
-    ctx.shadowBlur=0; ctx.fillStyle='rgba(0,0,0,0.7)'; ctx.fillRect(barX-1,barY-1,barW+2,barH+2);
+    ctx.fillStyle='rgba(0,0,0,0.7)'; ctx.fillRect(barX-1,barY-1,barW+2,barH+2);
     ctx.fillStyle='#111'; ctx.fillRect(barX,barY,barW,barH);
     const barColor=ph.isSpellCard?`hsl(${200+hpR*60},90%,65%)`:`hsl(${200+hpR*30},100%,55%)`;
-    ctx.shadowBlur=8; ctx.shadowColor=barColor;
+    ctx.shadowBlur=6; ctx.shadowColor=barColor;
     const bg=ctx.createLinearGradient(barX,0,barX+barW,0); bg.addColorStop(0,barColor); bg.addColorStop(1,'#ffffff44');
     ctx.fillStyle=bg; ctx.fillRect(barX,barY,barW*hpR,barH);
     ctx.shadowBlur=0;
     for(let i=1;i<state.phases.length;i++){ctx.fillStyle='rgba(0,0,0,0.8)';ctx.fillRect(barX+barW*(i/state.phases.length)-1,barY,2,barH);}
-    ctx.shadowBlur=isExtra?12:5; ctx.shadowColor=ph.color; ctx.fillStyle=ph.color;
+    ctx.fillStyle=ph.color;
     ctx.font=ph.isSpellCard?'bold 11px "Noto Serif JP",serif':'11px "Share Tech Mono",monospace';
     ctx.textAlign='center'; ctx.fillText(ph.name+(isExtra?' ✦':''),x,barY-6);
     ctx.font='bold 10px "Share Tech Mono",monospace'; ctx.fillStyle=state.defColor||ph.color;
     ctx.fillText(state.bossNameRom,x,barY-18);
     if(isExtra){ctx.font='bold 10px "Share Tech Mono",monospace';ctx.fillStyle='#cc44ff';ctx.fillText('⚠ EXTRA BOSS',x,barY-30);}
 
-    // Dialogue
-    if(state.showDialogue) drawDialogue(ctx,ph);
+    ctx.restore();
+
+    // Dialogue de phase/mort (dessiné séparément, toujours visible)
+    if (pendingDialogue) drawDialoguePanel(ctx, pendingDialogue);
+  }
+
+  // ── Dialogue panel ────────────────────────────
+  function drawDialoguePanel(ctx, dlg) {
+    if (!dlg) return;
+    const alpha = Math.min(1, dlg.timer / 30) * Math.min(1, dlg.timer / 15);
+    const W2 = state ? state.W : 400;
+    const panelX=8, panelY=410, panelW=W2-16, panelH=90;
+    ctx.save(); ctx.globalAlpha = alpha;
+    ctx.fillStyle='rgba(0,5,20,0.92)';
+    ctx.strokeStyle=dlg.color; ctx.lineWidth=1.5;
+    roundRect(ctx,panelX,panelY,panelW,panelH,6); ctx.fill(); ctx.stroke();
+
+    let textX = panelX + 14;
+    if (state && state.useSprite && sheetReady) {
+      const bz = ZONES.buste[dlg.busteIdx] || ZONES.buste[0];
+      const bh=78, bw=bh*(bz.sw/bz.sh);
+      ctx.drawImage(sheet,bz.sx,bz.sy,bz.sw,bz.sh,panelX+6,panelY+6,bw,bh);
+      textX = panelX + bw + 14;
+    }
+
+    ctx.fillStyle=dlg.color; ctx.font='bold 10px "Noto Serif JP",serif'; ctx.textAlign='left';
+    ctx.fillText(dlg.bossName||'???', textX, panelY+18);
+    ctx.fillStyle='#ddeeff'; ctx.font='11px "Noto Serif JP",serif';
+    wrapText(ctx, dlg.text, textX, panelY+36, panelW-textX+panelX-12, 15);
+
+    // Indicateur "appuie sur Z pour passer"
+    ctx.fillStyle='rgba(150,150,200,0.6)'; ctx.font='9px "Share Tech Mono",monospace';
+    ctx.textAlign='right';
+    ctx.fillText('Z — passer', panelX+panelW-8, panelY+panelH-6);
     ctx.restore();
   }
 
-  function drawDialogue(ctx,ph){
-    if(!state) return;
-    const alpha=Math.min(1,state.dialogueTimer/30)*Math.min(1,state.dialogueTimer/20);
-    const W2=state.W,panelX=8,panelY=420,panelW=W2-16,panelH=85;
-    ctx.save(); ctx.globalAlpha=alpha;
-    ctx.fillStyle='rgba(0,5,20,0.88)'; ctx.strokeStyle=ph.color; ctx.lineWidth=1.5;
-    ctx.shadowBlur=10; ctx.shadowColor=ph.color;
-    roundRect(ctx,panelX,panelY,panelW,panelH,6); ctx.fill(); ctx.stroke();
-    let textX=panelX+14;
-    if(state.useSprite&&sheetReady){const bz=ZONES.buste[ph.busteIdx]||ZONES.buste[0],bh=74,bw=bh*(bz.sw/bz.sh);ctx.drawImage(sheet,bz.sx,bz.sy,bz.sw,bz.sh,panelX+6,panelY+6,bw,bh);textX=panelX+bw+14;}
-    ctx.shadowBlur=0; ctx.fillStyle=ph.color; ctx.font='bold 10px "Noto Serif JP",serif'; ctx.textAlign='left';
-    ctx.fillText(state.bossName||'???',textX,panelY+18);
-    ctx.fillStyle='#ddeeff'; ctx.font='11px "Noto Serif JP",serif';
-    wrapText(ctx,state.dialogueText,textX,panelY+36,panelW-textX+panelX-12,15);
-    ctx.restore();
+  function drawIntroDialogue(ctx) {
+    if (!pendingDialogue) return;
+    drawDialoguePanel(ctx, pendingDialogue);
   }
+
   function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();}
   function wrapText(ctx,text,x,y,maxW,lineH){let line='',cy=y;for(const ch of text.split('')){const test=line+ch;if(ctx.measureText(test).width>maxW&&line!==''){ctx.fillText(line,x,cy);line=ch;cy+=lineH;}else line=test;}if(line)ctx.fillText(line,x,cy);}
 
-  return { spawn, spawnNext, fire, hit, draw, isDead, isActive, currentPhase, updateMovement, getState, reset, nextBossTriggerWave, allNormalDefeated, BOSS_ROSTER };
+  return {
+    spawn, spawnNext, fire, hit, draw, isDead, isActive, currentPhase,
+    updateMovement, getState, reset, nextBossTriggerWave, allNormalDefeated, BOSS_ROSTER,
+    // Dialogue API
+    hasDialogue, getDialogue, tickDialogue, skipDialogue,
+    triggerIntroDialogue, drawIntroDialogue,
+  };
 })();
